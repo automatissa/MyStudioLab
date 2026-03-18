@@ -1,6 +1,6 @@
 # Rust build artifacts
 /target/
-
+.claude
 # Cargo lock is committed for binaries, not for libraries
 # We keep Cargo.lock since this is a binary project
 
