@@ -5,6 +5,7 @@ mod app;
 mod screens;
 mod state;
 mod theme;
+#[allow(dead_code)]
 mod widgets;
 
 use anyhow::Result;

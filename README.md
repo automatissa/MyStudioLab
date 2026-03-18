@@ -9,15 +9,17 @@ No paywalls. No watermarks. No accounts. No internet required.
 
 ## Features
 
-- **Auto-zoom** — smooth zoom-in on clicks, eased transitions, configurable level and speed
+- **Desktop GUI** — dark-themed native app (egui/eframe), no browser, no Electron
+- **Auto-zoom** — smooth zoom-in on clicks, eased transitions, fully configurable
 - **Hardware-accelerated encoding** — NVENC (NVIDIA), AMF (AMD), VideoToolbox (Apple), VAAPI (Linux), libx265 fallback
 - **H.265/MP4 or AV1/WebM** output up to 4K @ 60 fps
 - **100% offline** — zero telemetry, zero network calls, all processing local
 - **Cross-platform** — Windows (WGC API), macOS (ScreenCaptureKit via scap), Linux (X11 + Wayland/PipeWire)
+- **CLI** — full headless control for scripting and automation
 
 ---
 
-## Install
+## Quick start
 
 ### Prerequisites
 
@@ -37,45 +39,59 @@ cd mystudiolab
 cargo build --release
 ```
 
-The binary is at `target/release/mystudiolab` (or `mystudiolab.exe` on Windows).
+| Binary | Path | Description |
+|--------|------|-------------|
+| GUI | `target/release/mystudiolab-gui.exe` | Desktop app (recommended) |
+| CLI | `target/release/mystudiolab.exe` | Headless / scriptable |
 
 ---
 
-## Usage
+## GUI
+
+Launch the desktop app:
 
 ```sh
-# Record primary display at 60 fps with auto-zoom (default)
+./target/release/mystudiolab-gui.exe
+```
+
+**⏺ Record tab** — set output path, display, FPS and zoom level, then click Start.
+**⚙ Settings tab** — fine-tune zoom transitions, hold duration, and audio sources.
+
+Click **Start Recording**, do your thing, click **Stop Recording** — the MP4 is saved automatically.
+
+---
+
+## CLI
+
+```sh
+# Record primary display at 60 fps with auto-zoom
 mystudiolab record
 
-# Custom output path and zoom level
-mystudiolab record --output ~/Videos/demo.mp4 --zoom 2.5
+# Custom output, zoom level, and FPS
+mystudiolab record --output ~/Videos/demo.mp4 --zoom 2.5 --fps 30
 
-# Record at 30 fps, no zoom
-mystudiolab record --fps 30 --no-zoom
+# No zoom
+mystudiolab record --no-zoom
 
-# Capture a specific display (0 = primary)
-mystudiolab record --display 1 --output second-monitor.mp4
+# Capture a secondary display
+mystudiolab record --display 1
 
-# With microphone audio
+# With microphone
 mystudiolab record --mic
 
 # AV1/WebM output
 mystudiolab record --output recording.webm
 ```
 
-Press **Ctrl-C** to stop recording. The output file is written and finalized on exit.
-
-### All options
+Press **Ctrl-C** to stop. The file is finalized on exit.
 
 ```
-Usage: mystudiolab record [OPTIONS]
-
 Options:
   -o, --output <OUTPUT>    Output file [default: recording.mp4]
-  -d, --display <DISPLAY>  Display index to capture (0 = primary) [default: 0]
+  -d, --display <DISPLAY>  Display index (0 = primary) [default: 0]
       --fps <FPS>          Frames per second [default: 60]
-      --zoom <ZOOM>        Maximum zoom level (1.0 = no zoom) [default: 2.0]
-      --no-zoom            Disable auto-zoom entirely
+      --zoom <ZOOM>        Max zoom level (1.0 = off) [default: 2.0]
+      --no-zoom            Disable auto-zoom
       --mic                Capture microphone audio
       --system-audio       Capture system audio (loopback)
 ```
@@ -92,7 +108,7 @@ Screen (WGC / scap)
        │  ZoomedFrame (crop + upscale)
        ▼
     Encoder
-       │  raw BGRA bytes → stdin
+       │  raw BGRA → stdin pipe
        ▼
    ffmpeg process  (hevc_nvenc / hevc_amf / libx265 / …)
        │
@@ -100,7 +116,7 @@ Screen (WGC / scap)
   output.mp4 / output.webm
 ```
 
-The encoder spawns `ffmpeg` as a child process and pipes raw BGRA frames into its stdin. This avoids FFmpeg C-library ABI issues on Windows while giving full access to every hardware encoder that the installed FFmpeg binary was compiled with.
+The encoder spawns `ffmpeg` as a child process and pipes raw BGRA frames into its stdin — no FFmpeg C-library linking required, full access to all hardware encoders in the installed binary.
 
 ---
 
@@ -108,21 +124,22 @@ The encoder spawns `ffmpeg` as a child process and pipes raw BGRA frames into it
 
 ```
 crates/
-  capture/   Screen capture (Windows WGC, macOS/Linux scap)
-  zoom/      Auto-zoom state machine, easing, rdev mouse tracker
-  encode/    ffmpeg subprocess encoder, hardware backend detection
-  audio/     Microphone + system loopback capture (cpal) — in progress
-  cli/       mystudiolab binary, end-to-end pipeline wiring
+  capture/   Screen capture — Windows WGC API, macOS/Linux scap
+  zoom/      Auto-zoom state machine, easing functions, rdev mouse tracker
+  encode/    ffmpeg subprocess encoder, hardware backend auto-detection
+  audio/     Microphone + system loopback (cpal) — stub, v1.1
+  cli/       mystudiolab binary — headless pipeline wiring
+  gui/       mystudiolab-gui binary — egui/eframe desktop app
 ```
 
 ---
 
 ## Roadmap
 
-- **v0.1** — screen capture + auto-zoom + H.265 encoding (current)
-- **v0.2** — audio capture (mic + loopback), muxed into output file
-- **v0.3** — display enumeration, window capture target
-- **v1.0** — high-quality Lanczos upscaler, configurable zoom easing
+- **v1.0** ✅ — GUI + CLI, screen capture, auto-zoom, H.265/AV1 hardware encoding
+- **v1.1** — audio capture (mic + loopback) muxed into output file
+- **v1.2** — display enumeration UI, window capture target
+- **v1.3** — high-quality Lanczos upscaler
 - **v2** — basic video editor (trim, cut) — fully offline
 - **v3** — effects, transitions, color grading — fully offline
 - **v4** — local plugin marketplace
@@ -132,12 +149,19 @@ crates/
 ## Dev environment (Windows)
 
 ```sh
-# Required environment variables
-FFMPEG_DIR     = C:\ffmpeg
-LIBCLANG_PATH  = C:\Program Files\LLVM\bin
+# Environment variables (set in .cargo/config.toml — no manual export needed)
+FFMPEG_DIR    = C:\ffmpeg
+LIBCLANG_PATH = C:\Program Files\LLVM\bin
 
-cargo check --workspace   # type-check all crates
+# Type-check everything
+cargo check --workspace
+
+# Build both binaries
 cargo build --release -p mystudiolab
+cargo build --release -p mystudiolab-gui
+
+# Run the GUI
+.\target\release\mystudiolab-gui.exe
 ```
 
 ---

@@ -97,9 +97,18 @@ impl HwAccel {
     // -------------------------------------------------------------------------
 
     fn query_encoders() -> std::io::Result<String> {
-        let output = std::process::Command::new("ffmpeg")
-            .args(["-hide_banner", "-encoders"])
-            .output()?;
+        #[cfg(target_os = "windows")]
+        use std::os::windows::process::CommandExt;
+        #[cfg(target_os = "windows")]
+        const CREATE_NO_WINDOW: u32 = 0x0800_0000;
+
+        let mut cmd = std::process::Command::new("ffmpeg");
+        cmd.args(["-hide_banner", "-encoders"]);
+
+        #[cfg(target_os = "windows")]
+        cmd.creation_flags(CREATE_NO_WINDOW);
+
+        let output = cmd.output()?;
         Ok(String::from_utf8_lossy(&output.stdout).into_owned())
     }
 }

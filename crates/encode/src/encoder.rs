@@ -4,6 +4,12 @@ use std::{
     process::{Child, ChildStdin, Command, Stdio},
 };
 
+#[cfg(target_os = "windows")]
+use std::os::windows::process::CommandExt;
+// CREATE_NO_WINDOW — prevents a console window flashing when ffmpeg is spawned
+#[cfg(target_os = "windows")]
+const CREATE_NO_WINDOW: u32 = 0x0800_0000;
+
 use capture::RawFrame;
 use tracing::{debug, info, warn};
 
@@ -122,10 +128,13 @@ impl Encoder {
         let mut cmd = Self::build_command(&config, hw_accel);
         debug!("ffmpeg command: {:?}", cmd);
 
+        #[cfg(target_os = "windows")]
+        cmd.creation_flags(CREATE_NO_WINDOW);
+
         let mut child = cmd
             .stdin(Stdio::piped())
             .stdout(Stdio::null())
-            .stderr(Stdio::inherit()) // show ffmpeg progress on stderr
+            .stderr(Stdio::null())
             .spawn()
             .map_err(|e| {
                 EncodeError::Ffmpeg(format!(

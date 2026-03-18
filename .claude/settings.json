@@ -26,7 +26,8 @@
       "Bash(powershell.exe -NoProfile -Command \"Get-ChildItem ''C:\\\\ffmpeg\\\\include\\\\libavcodec'' -Filter ''avfft*'' -ErrorAction SilentlyContinue | Select-Object Name\")",
       "Bash(c:/Users/issad/Documents/Issa/TOOL/MyStudioLab/target/release/mystudiolab.exe record:*)",
       "Bash(cargo fetch:*)",
-      "Bash(cargo build:*)"
+      "Bash(cargo build:*)",
+      "Bash(ls -lh target/release/*.exe)"
     ],
     "additionalDirectories": [
       "C:\\ffmpeg\\include\\libavcodec"
