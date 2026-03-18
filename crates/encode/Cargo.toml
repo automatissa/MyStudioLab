@@ -1,0 +1,14 @@
+[package]
+name = "encode"
+version.workspace = true
+edition.workspace = true
+description = "FFmpeg hardware-accelerated video encoding pipeline for MyStudioLab"
+
+[dependencies]
+tokio.workspace = true
+tracing.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+crossbeam-channel.workspace = true
+image.workspace = true
+capture = { path = "../capture" }

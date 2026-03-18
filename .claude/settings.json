@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cargo metadata:*)",
+      "Bash(cargo add:*)",
+      "Bash(cargo search:*)",
+      "Bash(cargo info:*)",
+      "WebFetch(domain:docs.rs)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:crates.io)",
+      "WebFetch(domain:api.github.com)",
+      "Read(//c//**)",
+      "Read(//c/ffmpeg/**)",
+      "Bash(cmd /c \"where ffmpeg\")",
+      "Bash(cmd /c \"ffmpeg -version 2>&1 | head -3\")",
+      "Bash(powershell -Command \"Get-ChildItem ''C:\\\\ProgramData\\\\chocolatey\\\\lib\\\\ffmpeg-full\\\\tools\\\\ffmpeg'' -ErrorAction SilentlyContinue\")",
+      "Bash(curl -s https://crates.io/api/v1/crates/windows-capture/versions)",
+      "Bash(python -c \"import sys,json; v=[x[''''num''''] for x in json.load\\(sys.stdin\\)[''''versions'''']]; print\\(''''\\\\n''''.join\\(v[:15]\\)\\)\")",
+      "Bash(cmd.exe /c \"dir C:\\\\ffmpeg 2>&1\")",
+      "Bash(cmd.exe /c \"where ffmpeg 2>&1 && ffmpeg -version 2>&1 | head -3\")",
+      "Bash(powershell.exe -Command \"Get-Command ffmpeg -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source; Test-Path ''C:\\\\ffmpeg''; Get-ChildItem ''C:\\\\'' -Filter ''ffmpeg*'' -ErrorAction SilentlyContinue | Select Name\")",
+      "Bash(powershell.exe -Command \"ffmpeg -version 2>&1 | Select-Object -First 3\")",
+      "Bash(powershell.exe -Command \"Get-ChildItem ''C:\\\\ProgramData\\\\chocolatey\\\\lib\\\\ffmpeg-full'' -Recurse -Filter ''include'' -ErrorAction SilentlyContinue | Select FullName; Get-ChildItem ''C:\\\\ProgramData\\\\chocolatey\\\\lib\\\\ffmpeg-full'' -Recurse -Filter ''lib'' -ErrorAction SilentlyContinue | Select FullName\")",
+      "Bash(powershell.exe -NoProfile -Command \"Get-ChildItem ''C:\\\\ffmpeg'' | Select-Object Name,PSIsContainer\")",
+      "Bash(powershell.exe -NoProfile -Command \"Get-ChildItem ''C:\\\\ffmpeg\\\\include\\\\libavcodec'' -Filter ''avfft*'' -ErrorAction SilentlyContinue | Select-Object Name\")",
+      "Bash(c:/Users/issad/Documents/Issa/TOOL/MyStudioLab/target/release/mystudiolab.exe record:*)",
+      "Bash(cargo fetch:*)",
+      "Bash(cargo build:*)"
+    ],
+    "additionalDirectories": [
+      "C:\\ffmpeg\\include\\libavcodec"
+    ]
+  }
+}

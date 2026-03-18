@@ -1,0 +1,20 @@
+# Build configuration for MyStudioLab
+# Env vars below tell ffmpeg-sys / bindgen where to find FFmpeg and libclang
+# on the developer's Windows machine.  Override via the real environment if
+# these paths differ on another machine.
+
+[env]
+FFMPEG_DIR      = "C:\\ffmpeg"
+LIBCLANG_PATH   = "C:\\Program Files\\LLVM\\bin"
+
+# Optionally speed up incremental builds with the faster linker (Windows):
+# [target.x86_64-pc-windows-msvc]
+# linker = "rust-lld"
+
+# Network — give each request more time and more retries.
+# Helps when crates.io is slow or the connection is unstable.
+[net]
+retry = 10
+
+[http]
+timeout = 120

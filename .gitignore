@@ -1,0 +1,41 @@
+# Rust build artifacts
+/target/
+
+# Cargo lock is committed for binaries, not for libraries
+# We keep Cargo.lock since this is a binary project
+
+# Environment / IDE
+.env
+.env.local
+*.env
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains / CLion
+.idea/
+
+# Windows
+Thumbs.db
+Desktop.ini
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+
+# FFmpeg stub header we created (machine-specific, not needed in source)
+C:/ffmpeg/include/libavcodec/avfft.h
+
+# Output recordings produced during testing
+*.mp4
+*.webm
+*.mkv
+
+# Log files
+*.log

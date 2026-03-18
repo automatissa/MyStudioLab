@@ -1,0 +1,55 @@
+[workspace]
+members = [
+    "crates/capture",
+    "crates/zoom",
+    "crates/encode",
+    "crates/audio",
+    "crates/cli",
+    "crates/gui",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["MyStudioLab Contributors"]
+license = "MIT"
+
+[workspace.dependencies]
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# Logging / tracing
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Error handling
+thiserror = "1"
+anyhow = "1"
+
+# Screen capture (consumed as a target-dep inside crates/capture — not workspace-wide)
+# scap version kept here for reference; actual dep is in crates/capture/Cargo.toml.
+scap = "0.1.0-beta.1"
+
+# Mouse / keyboard tracking
+rdev = "0.5"
+
+# FFmpeg bindings
+ffmpeg-next = "7"
+
+# Cross-platform audio
+cpal = "0.15"
+
+# CLI
+clap = { version = "4", features = ["derive"] }
+
+# Shared image/frame types
+image = "0.25"
+
+# Channels
+crossbeam-channel = "0.5"
+
+# GUI
+egui  = "0.31"
+eframe = { version = "0.31", features = ["default_fonts"] }
+

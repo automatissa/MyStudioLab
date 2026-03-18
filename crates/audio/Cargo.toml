@@ -1,0 +1,13 @@
+[package]
+name = "audio"
+version.workspace = true
+edition.workspace = true
+description = "Audio capture (mic + system) with sync for MyStudioLab"
+
+[dependencies]
+tokio.workspace = true
+tracing.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+cpal.workspace = true
+crossbeam-channel.workspace = true

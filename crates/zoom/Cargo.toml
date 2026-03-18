@@ -1,0 +1,15 @@
+[package]
+name = "zoom"
+version.workspace = true
+edition.workspace = true
+description = "Auto-zoom logic and frame processing for MyStudioLab"
+
+[dependencies]
+tokio.workspace = true
+tracing.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+rdev.workspace = true
+crossbeam-channel.workspace = true
+image.workspace = true
+capture = { path = "../capture" }

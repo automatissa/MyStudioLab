@@ -1,0 +1,22 @@
+[package]
+name = "mystudiolab"
+version.workspace = true
+edition.workspace = true
+description = "MyStudioLab — free, offline, open-source screen recorder with auto-zoom"
+
+[[bin]]
+name = "mystudiolab"
+path = "src/main.rs"
+
+[dependencies]
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+clap.workspace = true
+crossbeam-channel.workspace = true
+capture = { path = "../capture" }
+zoom    = { path = "../zoom" }
+encode  = { path = "../encode" }
+audio   = { path = "../audio" }

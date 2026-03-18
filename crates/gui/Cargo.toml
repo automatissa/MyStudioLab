@@ -1,0 +1,21 @@
+[package]
+name = "mystudiolab-gui"
+version.workspace = true
+edition.workspace = true
+description = "MyStudioLab — GUI frontend (egui/eframe)"
+
+[[bin]]
+name = "mystudiolab-gui"
+path = "src/main.rs"
+
+[dependencies]
+egui.workspace   = true
+eframe.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+anyhow.workspace = true
+crossbeam-channel.workspace = true
+capture = { path = "../capture" }
+zoom    = { path = "../zoom" }
+encode  = { path = "../encode" }
+audio   = { path = "../audio" }
